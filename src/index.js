@@ -29,24 +29,24 @@ function countRequest(req, res, next) {
 }
 
 // router main api
-app.get("/", (req, res, next) => {
+app.get("/", countRequest, (req, res, next) => {
   res.json({ status: "api on" });
 });
 
 // list all projects
-app.get("/projects", (req, res, next) => {
+app.get("/projects", countRequest, (req, res, next) => {
   return res.json(projects);
 });
 
 // create project
-app.post("/projects", (req, res, next) => {
+app.post("/projects", countRequest, (req, res, next) => {
   const { id, title } = req.body;
   projects.push({ id, title, tasks: [] });
   return res.json({ success: "Project create success" });
 });
 
 // update project
-app.put("/projects/:id", checkExistsProject, (req, res, next) => {
+app.put("/projects/:id", countRequest, checkExistsProject, (req, res, next) => {
   const { id } = req.params;
   const { title } = req.body;
   projects.map(
@@ -56,7 +56,7 @@ app.put("/projects/:id", checkExistsProject, (req, res, next) => {
 });
 
 // delete project
-app.delete("/projects/:id", checkExistsProject, (req, res, next) => {
+app.delete("/projects/:id", countRequest, checkExistsProject, (req, res, next) => {
   const { id } = req.params;
   const indexProject = projects.findIndex(project => project.id == id);
   projects.splice(indexProject, 1);
@@ -64,7 +64,7 @@ app.delete("/projects/:id", checkExistsProject, (req, res, next) => {
 });
 
 // add tasks
-app.post("/projects/:id/tasks", checkExistsProject, (req, res, next) => {
+app.post("/projects/:id/tasks", countRequest, checkExistsProject, (req, res, next) => {
   const { id } = req.params;
   const { title } = req.body;
   const index = projects.findIndex(project => project.id == id);
